@@ -324,6 +324,11 @@ class MpfMc(App):
         self.validate_machine_config_section('window')
         from mpfmc.uix.window import Window
         Window.initialize(self)
+
+        from kivy.core.window import Window as KivyWindow
+        from kivy.modules import inspector
+        inspector.create_inspector(KivyWindow, self)
+
         self.events.post('displays_initialized')
         '''event: displays_initialized
         desc: Posted as soon as MPF MC displays have been initialized.

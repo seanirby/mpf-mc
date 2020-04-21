@@ -619,6 +619,9 @@ class DisplayOutput(Scatter):
 
         self.key = None
 
+        # maintaining a list of children for compatibility with kivy inspector
+        self.children = []
+
         # It is important that the content of this display output does not contain any
         # circular references to the same display (cannot do a recursive
         # picture-in-picture or Kivy will crash).  Detect and prevent that situation.
@@ -654,6 +657,7 @@ class DisplayOutput(Scatter):
 
         widget.parent = self
         widget.parents.append(self)
+        self.children.append(widget)
 
         canvas = self.canvas
         canvas.add(widget.container.canvas)
@@ -664,6 +668,8 @@ class DisplayOutput(Scatter):
             raise KivyWidgetException(
                 'remove_display_source() can be used only with instances'
                 ' of the Display class.')
+
+        self.children.remove(widget)
         widget.parents.remove(self)
         widget.parent = None
         self.canvas.remove(widget.container.canvas)
